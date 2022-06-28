@@ -72,6 +72,6 @@
         <allow-intent href="itms-apps:*" />
     </platform>
 	<config-file platform="ios" target="*-Info.plist" parent="NSCameraUsageDescription" overwrite="true">
-	  <string>Allow the app to use your camera</string>
+	  <string>Take a photo and send it as an attachment to Roving Care Services to help you with your order.</string>
 	</config-file>
 </widget>
