@@ -36,13 +36,9 @@
     <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
 	<style>
-	.infinite {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.infitem {
-		width: 2em;
+	body {
+		overflow-y: scroll;
+		-webkit-overflow-scrolling: touch; 
 	}
 	</style>
   </head>
@@ -145,15 +141,17 @@
 <script>
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-	switch (device.platform) {
+	/*switch (device.platform) {
 		case "Android":
 			window.directory=cordova.file.externalRootDirectory;
 			break;
 		case "iOS":
 			window.directory = cordova.file.documentsDirectory;
 			break;
-	}
-
+	}*/
+	
+	window.directory = cordova.file.documentsDirectory;
+	
 	var permissions = cordova.plugins.permissions;
 	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function( status ){
 	  if ( status.hasPermission ) {

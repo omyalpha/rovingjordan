@@ -262,7 +262,7 @@
 <script>
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-	switch (device.platform) {
+	/*switch (device.platform) {
 		case "Android":
 			window.directory=cordova.file.externalRootDirectory;
 			break;
@@ -270,6 +270,8 @@ function onDeviceReady() {
 			window.directory = cordova.file.documentsDirectory;
 			break;
 	}
+	*/
+	window.directory = cordova.file.documentsDirectory;
 
 	var permissions = cordova.plugins.permissions;
 	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function( status ){
