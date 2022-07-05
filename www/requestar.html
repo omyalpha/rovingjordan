@@ -9,6 +9,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: cdvfile: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+
     <!-- Title -->
     <title>Roving Care</title>
     <!-- Fonts -->
@@ -271,9 +273,9 @@ function onDeviceReady() {
 			window.directory = cordova.file.documentsDirectory;
 			break;
 	}
-	*/
-	window.directory = cordova.file.documentsDirectory;
 	
+	window.directory = cordova.file.documentsDirectory;
+	*/
 	var permissions = cordova.plugins.permissions;
 	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function( status ){
 	  if ( status.hasPermission ) {
@@ -403,7 +405,7 @@ function onDeviceReady() {
 		
 		randomnum=Math.floor(Math.random() * 10000);
 		var fileTransfer = new FileTransfer();
-		var fileURL=directory+ 'download/' +randomnum+'_'+filename;
+		var fileURL='cdvfile://localhost/persistent/' +randomnum+'_'+filename;
 		var uri = encodeURI("https://rovingcare.com/uploads/"+filename);
 		
 		// get file extension
