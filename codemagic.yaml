@@ -27,8 +27,8 @@ workflows:
         script: |
           set -e # exit on first failed command
           
-          cvm install 10.0.0
-          cvm use 10.0.0
+          cvm install 11.0.0
+          cvm use 11.0.0
       - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
         script: keychain initialize
       - name: Set up Provisioning profiles from environment variables
