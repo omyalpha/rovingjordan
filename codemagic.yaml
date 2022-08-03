@@ -23,12 +23,6 @@ workflows:
     scripts:
       - name: Install dependencies
         script: npm ci
-      - name: Switch to a specific version of Cordova
-        script: |
-          set -e # exit on first failed command
-          
-          cvm install 10.0.0
-          cvm use 10.0.0
       - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
         script: keychain initialize
       - name: Set up Provisioning profiles from environment variables
