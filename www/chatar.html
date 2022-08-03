@@ -2,7 +2,7 @@
 <html lang="en" view-mode="rtl">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Affan - PWA Mobile HTML Template">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="theme-color" content="#0134d4">
@@ -41,6 +41,9 @@
 	body {
 		overflow-y: scroll;
 		-webkit-overflow-scrolling: touch; 
+	}
+	.form-control {
+		font-size: 16px !important;
 	}
 	</style>
   </head>
@@ -143,7 +146,33 @@
 <script>
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-	/*switch (device.platform) {
+	function downloadFile (url, fileName) {
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+			fs.root.getFile(fileName, {
+				create: true,
+				exclusive: false
+			}, function (fileEntry) {
+				var fileURL = fileEntry.toURL()
+				var fileTransfer = new FileTransfer();
+				fileTransfer.download(
+					url,
+					fileURL,
+					function (entry) {
+						var file = entry.toURL()
+					},
+					function (error) {
+						alert('error ' + error.code + '(' + fileName + ')');
+					}
+				);
+			}, function (error) {
+				alert('error: 2');
+			});
+		}, function() {
+			alert('error: 3');
+		})
+	}
+	/* Old tries
+	switch (device.platform) {
 		case "Android":
 			window.directory=cordova.file.externalRootDirectory;
 			break;
@@ -153,7 +182,7 @@ function onDeviceReady() {
 	}
 
 	window.directory = cordova.file.documentsDirectory;
-	*/
+	
 	var permissions = cordova.plugins.permissions;
 	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function( status ){
 	  if ( status.hasPermission ) {
@@ -161,7 +190,7 @@ function onDeviceReady() {
 		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
 	  }
 	});
-
+	*/
 }
 
 $(window).on('load', function() {
@@ -286,6 +315,14 @@ $(window).on('load', function() {
 		alert ("بدء تنزيل الملف");
 		
 		randomnum=Math.floor(Math.random() * 10000);
+		downloadFile('https://rovingcare.com/uploads/'+filename, randomnum+'_'+filename);
+	}
+	
+	/* old style
+	function download(filename) {
+		alert ("بدء تنزيل الملف");
+		
+		randomnum=Math.floor(Math.random() * 10000);
 		var fileTransfer = new FileTransfer();
 		var fileURL='cdvfile://localhost/persistent/' +randomnum+'_'+filename;
 		var uri = encodeURI("https://rovingcare.com/uploads/"+filename);
@@ -336,4 +373,6 @@ $(window).on('load', function() {
 			}
 		);
 	}
+	*/
+	
 </script>

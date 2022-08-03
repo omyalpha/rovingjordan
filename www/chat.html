@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Roving Care">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="theme-color" content="#0134d4">
@@ -40,6 +40,9 @@
 	body {
 		overflow-y: scroll;
 		-webkit-overflow-scrolling: touch; 
+	}
+	.form-control {
+		font-size: 16px !important;
 	}
 	</style>
   </head>
@@ -142,25 +145,31 @@
 <script>
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-	/*switch (device.platform) {
-		case "Android":
-			window.directory=cordova.file.externalRootDirectory;
-			break;
-		case "iOS":
-			window.directory = cordova.file.documentsDirectory;
-			break;
+	function downloadFile (url, fileName) {
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+			fs.root.getFile(fileName, {
+				create: true,
+				exclusive: false
+			}, function (fileEntry) {
+				var fileURL = fileEntry.toURL()
+				var fileTransfer = new FileTransfer();
+				fileTransfer.download(
+					url,
+					fileURL,
+					function (entry) {
+						var file = entry.toURL()
+					},
+					function (error) {
+						alert('error ' + error.code + '(' + fileName + ')');
+					}
+				);
+			}, function (error) {
+				alert('error: 2');
+			});
+		}, function() {
+			alert('error: 3');
+		})
 	}
-	
-	window.directory = cordova.file.documentsDirectory;
-	*/
-	var permissions = cordova.plugins.permissions;
-	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function( status ){
-	  if ( status.hasPermission ) {
-	  } else {
-		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
-	  }
-	});
-
 }
 
 $(window).on('load', function() {
@@ -286,54 +295,11 @@ $(window).on('load', function() {
 		alert ("Begin file download");
 		
 		randomnum=Math.floor(Math.random() * 10000);
-		var fileTransfer = new FileTransfer();
-		var fileURL='cdvfile://localhost/persistent/' +randomnum+'_'+filename;
-		var uri = encodeURI("https://rovingcare.com/uploads/"+filename);
-		
-		// get file extension
-		var ext = filename.split('.').pop();
-		
-		if (ext=='pdf') {
-			mime='application/pdf';
-		} else if (ext=='zip') {
-			mime='application/zip';
-		} else if (ext=='rtf') {
-			mime='application/rtf';
-		} else if (ext=='doc') {
-			mime='application/msword';
-		} else if (ext=='jpg') {
-			mime='image/jpeg';
-		} else if (ext=='png') {
-			mime='image/png';
-		} else if (ext=='gif') {
-			mime='image/gif';
-		} else if (ext=='mp4') {
-			mime='video/mp4';
-		} else if (ext=='avi') {
-			mime='video/x-msvideo';
-		} else if (ext=='mov') {
-			mime='video/quicktime';
-		} else {
-			mime='null';
-		}
-		
-		fileTransfer.download(
-			uri,
-			fileURL,
-			function(entry) {
-				alert("File saved");
-				
-				cordova.plugins.fileOpener2.open(fileURL, mime);
-			},
-			function(error) {
-				//alert("download error target " + error.target);
-			},
-			false,
-			{
-				headers: {
-					"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-				}
-			}
-		);
+		downloadFile('https://rovingcare.com/uploads/'+filename,randomnum+'_'+filename);
 	}
+	
+	
+	
+			
+	
 </script>
