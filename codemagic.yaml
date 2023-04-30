@@ -2,7 +2,7 @@ workflows:
   my-workflow:
     instance_type: mac_mini_m1
     environment:
-      xcode: 13
+      xcode: 13.3
       groups:
         - certificate_credentials
       # Add the above mentioned group environment variables in Codemagic UI (either in Application/Team variables): 
