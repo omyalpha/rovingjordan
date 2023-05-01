@@ -178,7 +178,7 @@ function onDeviceReady() {
 		})
 	}
 
-	$(window).on('load', function() {
+	//$(window).on('load', function() {
 		// get request id id
 		let searchParams = new URLSearchParams(window.location.search);
 		let getid = searchParams.get('id');
@@ -295,10 +295,11 @@ function onDeviceReady() {
 				}
 			});
 		});
-	});
+	//});
 	
 	function download(filename) {
 		alert ("Begin file download");
+		alert('file iz: https://rovingcare.com/uploads/'+filename);
 		
 		randomnum=Math.floor(Math.random() * 10000);
 		downloadFile('https://rovingcare.com/uploads/'+filename,randomnum+'_'+filename);
