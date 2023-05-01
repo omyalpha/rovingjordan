@@ -166,7 +166,36 @@ function onDeviceReady() {
 					url,
 					fileURL,
 					function (entry) {
-						var file = entry.toURL()
+						var file = entry.toURL();
+						alert("File saved");
+						
+						// get file extension
+						var ext = filename.split('.').pop();
+						
+						if (ext=='pdf') {
+							mime='application/pdf';
+						} else if (ext=='zip') {
+							mime='application/zip';
+						} else if (ext=='rtf') {
+							mime='application/rtf';
+						} else if (ext=='doc') {
+							mime='application/msword';
+						} else if (ext=='jpg') {
+							mime='image/jpeg';
+						} else if (ext=='png') {
+							mime='image/png';
+						} else if (ext=='gif') {
+							mime='image/gif';
+						} else if (ext=='mp4') {
+							mime='video/mp4';
+						} else if (ext=='avi') {
+							mime='video/x-msvideo';
+						} else if (ext=='mov') {
+							mime='video/quicktime';
+						} else {
+							mime='null';
+						}
+						cordova.plugins.fileOpener2.open(fileURL, mime);
 					},
 					function (error) {
 						alert('error ' + error.code + '(' + fileName + ')');
