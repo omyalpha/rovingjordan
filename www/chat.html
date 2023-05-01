@@ -82,7 +82,7 @@
       <div class="container">
         <div class="chat-content-wrap chatdiv">
         </div>
-		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show failed" role="alert" style="display:none">
+		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show alertfailed" role="alert" style="display:none">
               <button class="btn btn-close btn-close-white position-relative p-1 ms-auto" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 		<div class="alert custom-alert-1 alert-clock alert-dismissible fade show alertwait" role="alert" style="display:none">
@@ -150,6 +150,8 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 	alert ("device is ready");
+	alert (FileTransfer);
+}
 	function downloadFile (url, fileName) {
 		alert ("download function activated");
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -177,8 +179,17 @@ function onDeviceReady() {
 			alert('error: 3');
 		})
 	}
+	
+	function download(filename) {
+		$('.alertfailed').hide();
+		alert ("Begin file download");
+		alert('file iz: https://rovingcare.com/uploads/'+filename);
+			
+		randomnum=Math.floor(Math.random() * 10000);
+		downloadFile('https://rovingcare.com/uploads/'+filename,randomnum+'_'+filename);
+	}
 
-	//$(window).on('load', function() {
+	$(window).on('load', function() {
 		// get request id id
 		let searchParams = new URLSearchParams(window.location.search);
 		let getid = searchParams.get('id');
@@ -250,7 +261,7 @@ function onDeviceReady() {
 		// send message
 		$('.btn-submit').click(function(e){
 			e.preventDefault();
-			$('.alert').hide();
+			$('.alertfailed').hide();
 			textmessage=$('#textmessage').val();
 			$.ajax({
 				beforeSend: function() { $('.alertwait').show(); },
@@ -273,7 +284,7 @@ function onDeviceReady() {
 
 		// send file
 		$('#newfile').change(function() {
-			$('.alert').hide();
+			$('.alertfailed').hide();
 			var formData = new FormData();
 			formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
 			
@@ -290,21 +301,12 @@ function onDeviceReady() {
 				},
 				error:function(XMLHttpRequest,textStatus,errorThrown){
 				var errormsg=XMLHttpRequest.responseText;
-					$('.alert').show();
-					$('.alert').html(errormsg);
+					$('.alertfailed').show();
+					$('.alertfailed').html(errormsg);
 				}
 			});
 		});
-	//});
-	
-	function download(filename) {
-		alert ("Begin file download");
-		alert('file iz: https://rovingcare.com/uploads/'+filename);
-		
-		randomnum=Math.floor(Math.random() * 10000);
-		downloadFile('https://rovingcare.com/uploads/'+filename,randomnum+'_'+filename);
-	}
-}	
+	});
 	
 	
 			
