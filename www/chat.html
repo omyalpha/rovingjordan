@@ -152,13 +152,16 @@
 <script>
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
+	alert ("device is ready");
 	function downloadFile (url, fileName) {
+		alert ("download function activated");
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
 			fs.root.getFile(fileName, {
 				create: true,
 				exclusive: false
 			}, function (fileEntry) {
-				var fileURL = fileEntry.toURL()
+				var fileURL = fileEntry.toURL();
+				alert ("file url: "+fileURL);
 				var fileTransfer = new FileTransfer();
 				fileTransfer.download(
 					url,
@@ -268,13 +271,12 @@ $(window).on('load', function() {
 		});
 	});
 	
-//	$('.uploadfile').click(function() {
-//	   $('#newfile').click();
-//	});
+	$('.uploadfile').click(function() {
+	   $('#newfile').click();
+	});
 
 	// send file
-	//$('#newfile').change(function() {
-	$('.uploadfile').change(function() {
+	$('#newfile').change(function() {
 		$('.alert').hide();
 		var formData = new FormData();
 		formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
