@@ -85,6 +85,13 @@
 		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show failed" role="alert" style="display:none">
               <button class="btn btn-close btn-close-white position-relative p-1 ms-auto" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+		<div class="alert custom-alert-1 alert-clock alert-dismissible fade show alertwait" role="alert" style="display:none">
+              <svg class="bi bi-info-circle" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"></path>
+                <circle cx="8" cy="4.5" r="1"></circle>
+              </svg>Please Wait...
+        </div>
       </div>
     </div>
     <div class="chat-footer">
@@ -247,8 +254,8 @@ $(window).on('load', function() {
 		$('.alert').hide();
 		textmessage=$('#textmessage').val();
 		$.ajax({
-			beforeSend: function() { $('.alert').show(); $('.alert').html("Please Wait..."); },
-			complete: function(){ $('.alert').hide(); },
+			beforeSend: function() { $('.alertwait').show(); },
+			complete: function(){ $('.alertwait').hide(); },
 			type: "POST",
 			processData: false,
 			contentType: false,
@@ -266,14 +273,15 @@ $(window).on('load', function() {
 //	});
 
 	// send file
-	$('#newfile').change(function() {
+	//$('#newfile').change(function() {
+	$('.uploadfile').change(function() {
 		$('.alert').hide();
 		var formData = new FormData();
 		formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
 		
 		$.ajax({
-			beforeSend: function() { $('.alert').show(); $('.alert').html("Please Wait..."); },
-			complete: function(){ $('.alert').hide(); },
+			beforeSend: function() { $('.alertwait').show(); },
+			complete: function(){ $('.alertwait').hide(); },
 			type: "POST",
 			processData: false,
 			contentType: false,
