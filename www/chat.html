@@ -151,7 +151,70 @@ document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 	alert ("device is ready");
 	alert (FileTransfer);
+	window.directory = cordova.file.documentsDirectory;
+	alert ("Directory: " + directory);
 }
+	
+	function download(filename) {
+		$('.alertfailed').hide();
+		alert ("Begin file download");
+		alert('file iz: https://rovingcare.com/uploads/'+filename);
+		
+		randomnum=Math.floor(Math.random() * 10000);
+		var fileTransfer = new FileTransfer();
+		var fileURL=directory +randomnum+'_'+filename;
+		var uri = encodeURI("https://rovingcare.com/uploads/"+filename);
+		
+		// get file extension
+		var ext = filename.split('.').pop();
+		
+		if (ext=='pdf') {
+			mime='application/pdf';
+		} else if (ext=='zip') {
+			mime='application/zip';
+		} else if (ext=='rtf') {
+			mime='application/rtf';
+		} else if (ext=='doc') {
+			mime='application/msword';
+		} else if (ext=='jpg') {
+			mime='image/jpeg';
+		} else if (ext=='png') {
+			mime='image/png';
+		} else if (ext=='gif') {
+			mime='image/gif';
+		} else if (ext=='mp4') {
+			mime='video/mp4';
+		} else if (ext=='avi') {
+			mime='video/x-msvideo';
+		} else if (ext=='mov') {
+			mime='video/quicktime';
+		} else {
+			mime='null';
+		}
+		
+		alert ("mime: " + mime);
+		
+		fileTransfer.download(
+			uri,
+			fileURL,
+			function(entry) {
+				alert("File saved");
+				
+				cordova.plugins.fileOpener2.open(fileURL, mime);
+			},
+			function(error) {
+				alert("download error target " + error.target);
+			},
+			false,
+			{
+				headers: {
+					"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+				}
+			}
+		);
+	}
+	
+	/*
 	function downloadFile (url, fileName) {
 		alert ("download function activated");
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -212,6 +275,7 @@ function onDeviceReady() {
 		})
 	}
 	
+	
 	function download(filename) {
 		$('.alertfailed').hide();
 		alert ("Begin file download");
@@ -220,6 +284,7 @@ function onDeviceReady() {
 		randomnum=Math.floor(Math.random() * 10000);
 		downloadFile('https://rovingcare.com/uploads/'+filename,randomnum+'_'+filename);
 	}
+	*/
 
 	$(window).on('load', function() {
 		// get request id id
