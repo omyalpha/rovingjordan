@@ -103,7 +103,7 @@
               </button>
             </div>
 			<!--<form>-->
-                <input id="newfile" class="form-control" type="file" style="display:none">
+                <input id="newfile" class="form-control uploadfile" type="file" style="display:none">
             <!--</form>-->
             <!-- Send -->
             <button class="btn btn-submit" type="submit">
@@ -247,8 +247,8 @@ $(window).on('load', function() {
 		$('.alert').hide();
 		textmessage=$('#textmessage').val();
 		$.ajax({
-			beforeSend: function() { $('.spinner-grow').show(); },
-			complete: function(){ $('.spinner-grow').hide(); },
+			beforeSend: function() { $('.alert').show(); $('.alert').html("Please Wait..."); },
+			complete: function(){ $('.alert').hide(); },
 			type: "POST",
 			processData: false,
 			contentType: false,
@@ -261,9 +261,9 @@ $(window).on('load', function() {
 		});
 	});
 	
-	$('.uploadfile').click(function() {
-	   $('#newfile').click();
-	});
+//	$('.uploadfile').click(function() {
+//	   $('#newfile').click();
+//	});
 
 	// send file
 	$('#newfile').change(function() {
@@ -272,8 +272,8 @@ $(window).on('load', function() {
 		formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
 		
 		$.ajax({
-			beforeSend: function() { $('.spinner-grow').show(); },
-			complete: function(){ $('.spinner-grow').hide(); },
+			beforeSend: function() { $('.alert').show(); $('.alert').html("Please Wait..."); },
+			complete: function(){ $('.alert').hide(); },
 			type: "POST",
 			processData: false,
 			contentType: false,
