@@ -48,6 +48,7 @@ workflows:
 
           cordova platform remove ios --nosave
           cordova platform add ios --confirm --no-interactive --noresources --save
+          cordova platform add browser --confirm --no-interactive --noresources --save
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
       - name: Build iOS release
