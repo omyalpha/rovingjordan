@@ -124,6 +124,63 @@
 $(window).on('load', function() {
 	// general data		
 	window.savedtoken = localStorage.getItem("token");
+	
+	/// testing - delete///
+	function saveFile(dirEntry, fileData, fileName) {
+
+		dirEntry.getFile(fileName, { create: true, exclusive: false }, function (fileEntry) {
+
+			writeFile(fileEntry, fileData);
+			alert ("written");
+		}, onErrorCreateFile);
+	}
+
+
+	function writeFile(fileEntry, dataObj, isAppend) {
+
+		// Create a FileWriter object for our FileEntry (log.txt).
+		fileEntry.createWriter(function (fileWriter) {
+			alert ("inside");
+			fileWriter.onwriteend = function() {
+				alert("Successful file write...");
+				if (dataObj.type == "image/png") {
+					alert ("success");
+					readBinaryFile(fileEntry);
+				}
+				else {
+					alert ("failed");
+					readFile(fileEntry);
+				}
+			};
+
+			fileWriter.onerror = function(e) {
+				alert("Failed file write: " + e.toString());
+			};
+
+			fileWriter.write(dataObj);
+		});
+	}
+
+
+	
+	var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://rovingcare.com/uploads/6096907872.png', true);
+    xhr.responseType = 'blob';
+
+    xhr.onload = function() {
+        if (this.status == 200) {
+
+            var blob = new Blob([this.response], { type: 'image/png' });
+            saveFile(dirEntry, blob, "downloadedImage.png");
+        } else {
+			alert ("failed: "  + this.status);
+		}
+    };
+    xhr.send();
+	
+	
+	
+	////////////////////////
 
 	// get requests list
 	$.ajax({
