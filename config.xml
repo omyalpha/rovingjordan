@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.rovingcare.newios" version="15.13.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.rovingcare.newios" version="15.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Roving Care Services</name>
     <description>
         Roving Care Mobile App
@@ -50,7 +50,7 @@
 	
 	<plugin name="cordova-plugin-whitelist" spec="1.3.4" />
 	<plugin name="cordova-plugin-file" source="npm" spec="7.0.0" />
-	<plugin name="cordova-plugin-file-transfer" source="npm" spec="1.7.1" />
+	<plugin name="cordova-plugin-file-transfer" source="npm" spec="1.6.3" />
 	
 	<preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
 
@@ -71,8 +71,7 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-	<preference name="DisallowOverscroll" value="true" />
-	
+		<preference name="DisallowOverscroll" value="true" />
     </platform>
 	<config-file platform="ios" target="*-Info.plist" parent="NSCameraUsageDescription" overwrite="true">
 	  <string>Take a photo and send it as an attachment to Roving Care Services to help you with your order.</string>
