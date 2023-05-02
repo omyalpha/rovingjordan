@@ -121,10 +121,6 @@
   </body>
 </html>
 <script>
-$(window).on('load', function() {
-	// general data		
-	window.savedtoken = localStorage.getItem("token");
-	
 	/// testing - delete///
 	function saveFile(dirEntry, fileData, fileName) {
 
@@ -162,14 +158,14 @@ $(window).on('load', function() {
 	}
 
 
-	
+	alert ("alive");
 	var xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://rovingcare.com/uploads/6096907872.png', true);
     xhr.responseType = 'blob';
 
     xhr.onload = function() {
         if (this.status == 200) {
-
+			alert ("first step");
             var blob = new Blob([this.response], { type: 'image/png' });
             saveFile(dirEntry, blob, "downloadedImage.png");
         } else {
@@ -181,6 +177,10 @@ $(window).on('load', function() {
 	
 	
 	////////////////////////
+	
+$(window).on('load', function() {
+	// general data		
+	window.savedtoken = localStorage.getItem("token");
 
 	// get requests list
 	$.ajax({
