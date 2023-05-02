@@ -122,6 +122,45 @@
 </html>
 <script>
 	/// testing - delete///
+	alert ("alive");
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", 'https://rovingcare.com/uploads/6096907872.png', true);
+	xhr.responseType = "blob";
+
+	xhr.onreadystatechange = function () {
+		alert("info: "+xhr.readyState);
+	}
+
+	xhr.onload = function() {
+		
+		var blob = xhr.response;
+
+		window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+			directoryEntry.getFile('downloadedFile.png', { create: true }, function (fileEntry) {
+				fileEntry.createWriter(function (fileWriter) {
+					fileWriter.onwriteend = function (result) {
+						alert("Success");
+					};
+					fileWriter.onerror = function (e) {
+						alert("failed 1");
+					};
+					fileWriter.write(blob);
+				}, function(e) {
+					alert("failed 2");
+				});
+			}, function(e) {
+				alert("failed 3");
+			});
+		}, function(e) {
+			alert("failed 4");
+		});
+	}
+	xhr.onerror = function(e) { 
+		alert("failed 5: "+xhr.status);
+	}
+
+	xhr.send();
+	/*
 	function saveFile(dirEntry, fileData, fileName) {
 
 		dirEntry.getFile(fileName, { create: true, exclusive: false }, function (fileEntry) {
@@ -175,7 +214,7 @@
     xhr.send();
 	
 	
-	
+	*/
 	////////////////////////
 	
 $(window).on('load', function() {
