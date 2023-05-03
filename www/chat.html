@@ -85,7 +85,7 @@
 		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show alertfailed" role="alert" style="display:none">
               <button class="btn btn-close btn-close-white position-relative p-1 ms-auto" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-		<div class="alert custom-alert-1 alert-clock alert-dismissible fade show alertwait" role="alert" style="display:none">
+		<div class="alert custom-alert-1 alert-success alert-dismissible fade show alertwait" role="alert" style="display:none">
               <svg class="bi bi-info-circle" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
                 <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"></path>
@@ -276,7 +276,8 @@ function onDeviceReady() {
 	
 		// download script
 		function download(filename) {
-			alert ("button clicked");
+			$('.alertfailed').hide(); 
+			$('.alertwait').show(); 
 			// get file extension
 			var ext = filename.split('.').pop();
 			
@@ -304,7 +305,7 @@ function onDeviceReady() {
 				mime='null';
 			}
 			
-			alert ("extension: "+ext+" - mime: "+mime);
+			// alert ("extension: "+ext+" - mime: "+mime);
 			
 			var xhr = new XMLHttpRequest();
 			xhr.open("GET", 'https://rovingcare.com/uploads/'+filename, true);
@@ -318,12 +319,12 @@ function onDeviceReady() {
 			xhr.onload = function() {
 			
 				var blob = xhr.response;
-				alert("xhr.onload response: "+xhr.response);
-				alert("cordova.file: "+cordova.file);
-				alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
-				alert("cacheDirectory: "+cordova.file.cacheDirectory);
-				alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
-				alert("documentsDirectory: "+cordova.file.documentsDirectory);
+				//alert("xhr.onload response: "+xhr.response);
+				//alert("cordova.file: "+cordova.file);
+				//alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
+				//alert("cacheDirectory: "+cordova.file.cacheDirectory);
+				//alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+				//alert("documentsDirectory: "+cordova.file.documentsDirectory);
 				
 				randomnum=Math.floor(Math.random() * 10000);
 				var newfilename=randomnum+'_'+filename;
@@ -332,21 +333,21 @@ function onDeviceReady() {
 					directoryEntry.getFile(newfilename, { create: true }, function (fileEntry) {
 						fileEntry.createWriter(function (fileWriter) {
 							fileWriter.onwriteend = function (result) {
-								alert("Success");
+								//alert("Success");
 								cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + newfilename, mime);
 							};
 							fileWriter.onerror = function (e) {
-								alert("failed 1");
+								alert("failed - error: 1");
 							};
 							fileWriter.write(blob);
 						}, function(e) {
-							alert("failed 2");
+							alert("failed - error: 2");
 						});
 					}, function(e) {
-						alert("failed 3");
+						alert("failed - error: 3");
 					});
 				}, function(e) {
-					alert("failed 4");
+					alert("failed - error: 4");
 				});
 			}
 			xhr.onerror = function(e) { 
@@ -354,5 +355,6 @@ function onDeviceReady() {
 			}
 
 			xhr.send();
+			$('.alertwait').hide(); 
 		}
 </script>

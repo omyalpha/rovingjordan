@@ -83,8 +83,15 @@
       <div class="container">
         <div class="chat-content-wrap chatdiv">
         </div>
-		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show failed" role="alert" style="display:none">
+		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show alertfailed" role="alert" style="display:none">
               <button class="btn btn-close btn-close-white position-relative p-1 ms-auto" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+		<div class="alert custom-alert-1 alert-success alert-dismissible fade show alertwait" role="alert" style="display:none">
+              <svg class="bi bi-info-circle" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"></path>
+                <circle cx="8" cy="4.5" r="1"></circle>
+              </svg>الرجاء الإنتظار...
         </div>
       </div>
     </div>
@@ -144,6 +151,7 @@
   </body>
 </html>
 <script>
+/* old attempts
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 	function downloadFile (url, fileName) {
@@ -171,7 +179,7 @@ function onDeviceReady() {
 			alert('error: 3');
 		})
 	}
-	/* Old tries
+	
 	switch (device.platform) {
 		case "Android":
 			window.directory=cordova.file.externalRootDirectory;
@@ -190,8 +198,7 @@ function onDeviceReady() {
 		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
 	  }
 	});
-	*/
-}
+}*/
 
 $(window).on('load', function() {
 	// get request id id
@@ -264,7 +271,7 @@ $(window).on('load', function() {
 	// send message
 	$('.btn-submit').click(function(e){
 		e.preventDefault();
-		$('.alert').hide();
+		$('.alertfailed').hide();
 		textmessage=$('#textmessage').val();
 		$.ajax({
 			beforeSend: function() { $('.spinner-grow').show(); },
@@ -287,7 +294,7 @@ $(window).on('load', function() {
 
 	// send file
 	$('#newfile').change(function() {
-		$('.alert').hide();
+		$('.alertfailed').hide();
 		var formData = new FormData();
 		formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
 		
@@ -304,13 +311,13 @@ $(window).on('load', function() {
 			},
 			error:function(XMLHttpRequest,textStatus,errorThrown){
 			var errormsg=XMLHttpRequest.responseText;
-				$('.alert').show();
-				$('.alert').html(errormsg);
+				$('.alertfailed').show();
+				$('.alertfailed').html(errormsg);
 			}
 		});
     });
 });
-
+	/*
 	function download(filename) {
 		alert ("بدء تنزيل الملف");
 		
@@ -318,7 +325,6 @@ $(window).on('load', function() {
 		downloadFile('https://rovingcare.com/uploads/'+filename, randomnum+'_'+filename);
 	}
 	
-	/* old style
 	function download(filename) {
 		alert ("بدء تنزيل الملف");
 		
@@ -374,5 +380,88 @@ $(window).on('load', function() {
 		);
 	}
 	*/
+	// download script
+		function download(filename) {
+			$('.alertfailed').hide(); 
+			$('.alertwait').show(); 
+			// get file extension
+			var ext = filename.split('.').pop();
+			
+			if (ext=='pdf') {
+				mime='application/pdf';
+			} else if (ext=='zip') {
+				mime='application/zip';
+			} else if (ext=='rtf') {
+				mime='application/rtf';
+			} else if (ext=='doc') {
+				mime='application/msword';
+			} else if (ext=='jpg') {
+				mime='image/jpeg';
+			} else if (ext=='png') {
+				mime='image/png';
+			} else if (ext=='gif') {
+				mime='image/gif';
+			} else if (ext=='mp4') {
+				mime='video/mp4';
+			} else if (ext=='avi') {
+				mime='video/x-msvideo';
+			} else if (ext=='mov') {
+				mime='video/quicktime';
+			} else {
+				mime='null';
+			}
+			
+			// alert ("extension: "+ext+" - mime: "+mime);
+			
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", 'https://rovingcare.com/uploads/'+filename, true);
+			xhr.responseType = "blob";
+
+			xhr.onreadystatechange = function () {
+				//alert("readyState: "+xhr.readyState);
+				//alert("status: "+xhr.status);
+			}
+
+			xhr.onload = function() {
+			
+				var blob = xhr.response;
+				//alert("xhr.onload response: "+xhr.response);
+				//alert("cordova.file: "+cordova.file);
+				//alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
+				//alert("cacheDirectory: "+cordova.file.cacheDirectory);
+				//alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+				//alert("documentsDirectory: "+cordova.file.documentsDirectory);
+				
+				randomnum=Math.floor(Math.random() * 10000);
+				var newfilename=randomnum+'_'+filename;
+				
+				window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+					directoryEntry.getFile(newfilename, { create: true }, function (fileEntry) {
+						fileEntry.createWriter(function (fileWriter) {
+							fileWriter.onwriteend = function (result) {
+								//alert("Success");
+								cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + newfilename, mime);
+							};
+							fileWriter.onerror = function (e) {
+								alert("failed - error: 1");
+							};
+							fileWriter.write(blob);
+						}, function(e) {
+							alert("failed - error: 2");
+						});
+					}, function(e) {
+						alert("failed - error: 3");
+					});
+				}, function(e) {
+					alert("failed - error: 4");
+				});
+			}
+			xhr.onerror = function(e) { 
+				alert("failed 5: "+xhr.status);
+			}
+
+			xhr.send();
+			$('.alertwait').hide(); 
+		}
 	
 </script>

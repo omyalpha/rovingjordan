@@ -196,35 +196,6 @@
   </body>
 </html>
 <script>
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-	function downloadFile (url, fileName) {
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-			fs.root.getFile(fileName, {
-				create: true,
-				exclusive: false
-			}, function (fileEntry) {
-				var fileURL = fileEntry.toURL()
-				var fileTransfer = new FileTransfer();
-				fileTransfer.download(
-					url,
-					fileURL,
-					function (entry) {
-						var file = entry.toURL()
-					},
-					function (error) {
-						alert('error ' + error.code + '(' + fileName + ')');
-					}
-				);
-			}, function (error) {
-				alert('error: 2');
-			});
-		}, function() {
-			alert('error: 3');
-		})
-	}
-}
-
 $(window).on('load', function() {
 	// general data		
 	window.savedtoken = localStorage.getItem("token");
@@ -330,10 +301,85 @@ $(window).on('load', function() {
 		zaname = zaname.split("download");
 		filename=zaname[1];
 		
-		alert ("بدء تنزيل الملف");
-		
-		randomnum=Math.floor(Math.random() * 10000);
-		downloadFile('https://rovingcare.com/uploads/'+filename, randomnum+'_'+filename);
+		function download(filename) {
+			// get file extension
+			var ext = filename.split('.').pop();
+				
+			if (ext=='pdf') {
+				mime='application/pdf';
+			} else if (ext=='zip') {
+				mime='application/zip';
+			} else if (ext=='rtf') {
+				mime='application/rtf';
+			} else if (ext=='doc') {
+				mime='application/msword';
+			} else if (ext=='jpg') {
+				mime='image/jpeg';
+			} else if (ext=='png') {
+				mime='image/png';
+			} else if (ext=='gif') {
+				mime='image/gif';
+			} else if (ext=='mp4') {
+				mime='video/mp4';
+			} else if (ext=='avi') {
+					mime='video/x-msvideo';
+			} else if (ext=='mov') {
+				mime='video/quicktime';
+			} else {
+				mime='null';
+			}
+				
+			// alert ("extension: "+ext+" - mime: "+mime);
+			
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", 'https://rovingcare.com/uploads/'+filename, true);
+			xhr.responseType = "blob";
+
+			xhr.onreadystatechange = function () {
+				//alert("readyState: "+xhr.readyState);
+				//alert("status: "+xhr.status);
+			}
+
+			xhr.onload = function() {
+				
+				var blob = xhr.response;
+				//alert("xhr.onload response: "+xhr.response);
+				//alert("cordova.file: "+cordova.file);
+				//alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
+				//alert("cacheDirectory: "+cordova.file.cacheDirectory);
+				//alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+				//alert("documentsDirectory: "+cordova.file.documentsDirectory);
+					
+				randomnum=Math.floor(Math.random() * 10000);
+				var newfilename=randomnum+'_'+filename;
+					
+				window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+					directoryEntry.getFile(newfilename, { create: true }, function (fileEntry) {
+						fileEntry.createWriter(function (fileWriter) {
+							fileWriter.onwriteend = function (result) {
+								//alert("Success");
+								cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + newfilename, mime);
+							};
+							fileWriter.onerror = function (e) {
+								alert("failed - error: 1");
+							};
+							fileWriter.write(blob);
+						}, function(e) {
+							alert("failed - error: 2");
+						});
+					}, function(e) {
+						alert("failed - error: 3");
+					});
+				}, function(e) {
+					alert("failed - error: 4");
+				});
+			}
+			xhr.onerror = function(e) { 
+				alert("failed 5: "+xhr.status);
+			}
+
+			xhr.send();
+		}
 		
 	});
 });
