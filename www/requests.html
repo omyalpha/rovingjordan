@@ -99,6 +99,7 @@
       </div>
     </div>
     <!-- All JavaScript Files -->
+	<script src="cordova.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/internet-status.js"></script>
@@ -124,6 +125,7 @@
 	/// testing - delete///
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady() {
+		alert("Ready");
 		alert("ondeviceready: cordova.file: "+cordova.file);
 		alert("ondeviceready: cacheDirectory: "+cordova.file.cacheDirectory);
 		alert("ondeviceready: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
