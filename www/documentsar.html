@@ -301,86 +301,83 @@ $(window).on('load', function() {
 		zaname = zaname.split("download");
 		filename=zaname[1];
 		
-		function download(filename) {
-			// get file extension
-			var ext = filename.split('.').pop();
+		// get file extension
+		var ext = filename.split('.').pop();
 				
-			if (ext=='pdf') {
-				mime='application/pdf';
-			} else if (ext=='zip') {
-				mime='application/zip';
-			} else if (ext=='rtf') {
-				mime='application/rtf';
-			} else if (ext=='doc') {
-				mime='application/msword';
-			} else if (ext=='jpg') {
-				mime='image/jpeg';
-			} else if (ext=='png') {
-				mime='image/png';
-			} else if (ext=='gif') {
-				mime='image/gif';
-			} else if (ext=='mp4') {
-				mime='video/mp4';
-			} else if (ext=='avi') {
-					mime='video/x-msvideo';
-			} else if (ext=='mov') {
-				mime='video/quicktime';
-			} else {
-				mime='null';
-			}
+		if (ext=='pdf') {
+			mime='application/pdf';
+		} else if (ext=='zip') {
+			mime='application/zip';
+		} else if (ext=='rtf') {
+			mime='application/rtf';
+		} else if (ext=='doc') {
+			mime='application/msword';
+		} else if (ext=='jpg') {
+			mime='image/jpeg';
+		} else if (ext=='png') {
+			mime='image/png';
+		} else if (ext=='gif') {
+			mime='image/gif';
+		} else if (ext=='mp4') {
+			mime='video/mp4';
+		} else if (ext=='avi') {
+			mime='video/x-msvideo';
+		} else if (ext=='mov') {
+			mime='video/quicktime';
+		} else {
+			mime='null';
+		}
 				
-			// alert ("extension: "+ext+" - mime: "+mime);
+		// alert ("extension: "+ext+" - mime: "+mime);
 			
-			var xhr = new XMLHttpRequest();
-			xhr.open("GET", 'https://rovingcare.com/uploads/'+filename, true);
-			xhr.responseType = "blob";
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", 'https://rovingcare.com/uploads/'+filename, true);
+		xhr.responseType = "blob";
 
-			xhr.onreadystatechange = function () {
-				//alert("readyState: "+xhr.readyState);
-				//alert("status: "+xhr.status);
-			}
+		xhr.onreadystatechange = function () {
+			//alert("readyState: "+xhr.readyState);
+			//alert("status: "+xhr.status);
+		}
 
-			xhr.onload = function() {
+		xhr.onload = function() {
 				
-				var blob = xhr.response;
-				//alert("xhr.onload response: "+xhr.response);
-				//alert("cordova.file: "+cordova.file);
-				//alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
-				//alert("cacheDirectory: "+cordova.file.cacheDirectory);
-				//alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
-				//alert("documentsDirectory: "+cordova.file.documentsDirectory);
+			var blob = xhr.response;
+			//alert("xhr.onload response: "+xhr.response);
+			//alert("cordova.file: "+cordova.file);
+			//alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
+			//alert("cacheDirectory: "+cordova.file.cacheDirectory);
+			//alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+			//alert("documentsDirectory: "+cordova.file.documentsDirectory);
 					
-				randomnum=Math.floor(Math.random() * 10000);
-				var newfilename=randomnum+'_'+filename;
+			randomnum=Math.floor(Math.random() * 10000);
+			var newfilename=randomnum+'_'+filename;
 					
-				window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
-					directoryEntry.getFile(newfilename, { create: true }, function (fileEntry) {
-						fileEntry.createWriter(function (fileWriter) {
-							fileWriter.onwriteend = function (result) {
-								//alert("Success");
-								cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + newfilename, mime);
-							};
-							fileWriter.onerror = function (e) {
-								alert("failed - error: 1");
-							};
-							fileWriter.write(blob);
-						}, function(e) {
-							alert("failed - error: 2");
-						});
+			window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+				directoryEntry.getFile(newfilename, { create: true }, function (fileEntry) {
+					fileEntry.createWriter(function (fileWriter) {
+						fileWriter.onwriteend = function (result) {
+							//alert("Success");
+							cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + newfilename, mime);
+						};
+						fileWriter.onerror = function (e) {
+							alert("failed - error: 1");
+						};
+						fileWriter.write(blob);
 					}, function(e) {
-						alert("failed - error: 3");
+						alert("failed - error: 2");
 					});
 				}, function(e) {
-					alert("failed - error: 4");
+					alert("failed - error: 3");
 				});
-			}
-			xhr.onerror = function(e) { 
-				alert("failed 5: "+xhr.status);
-			}
-
-			xhr.send();
+			}, function(e) {
+				alert("failed - error: 4");
+			});
 		}
-		
+		xhr.onerror = function(e) { 
+			alert("failed 5: "+xhr.status);
+		}
+
+		xhr.send();
 	});
 });
 </script>
