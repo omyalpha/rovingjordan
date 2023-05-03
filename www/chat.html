@@ -2,15 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Roving Care">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="theme-color" content="#0134d4">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-	<!-- Title -->
+    <!-- Title -->
     <title>Roving Care</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -37,12 +36,13 @@
     <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
 	<style>
-	body {
-		overflow-y: scroll;
-		-webkit-overflow-scrolling: touch; 
+	.infinite {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
-	.form-control {
-		font-size: 16px !important;
+	.infitem {
+		width: 2em;
 	}
 	</style>
   </head>
@@ -82,24 +82,17 @@
       <div class="container">
         <div class="chat-content-wrap chatdiv">
         </div>
-		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show alertfailed" role="alert" style="display:none">
+		<div class="alert custom-alert-2 alert-danger alert-dismissible fade show failed" role="alert" style="display:none">
               <button class="btn btn-close btn-close-white position-relative p-1 ms-auto" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-		<div class="alert custom-alert-1 alert-clock alert-dismissible fade show alertwait" role="alert" style="display:none">
-              <svg class="bi bi-info-circle" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"></path>
-                <circle cx="8" cy="4.5" r="1"></circle>
-              </svg>Please Wait...
         </div>
       </div>
     </div>
     <div class="chat-footer">
       <div class="container h-100">
         <div class="chat-footer-content h-100 d-flex align-items-center">
-          <form>
+          <form action="#">
             <!-- Message -->
-            <input class="form-control" id="textmessage" type="text" placeholder="Type here....">
+            <input class="form-control" id="textmessage" type="text" placeholder="Type here...">
             <!-- Add File -->
             <div class="dropup me-2 uploadfile">
               <button class="btn btn-add-file" type="button" aria-expanded="false">
@@ -109,9 +102,9 @@
                 </svg>
               </button>
             </div>
-			<!--<form>-->
+			<form>
                 <input id="newfile" class="form-control" type="file" style="display:none">
-            <!--</form>-->
+              </form>
             <!-- Send -->
             <button class="btn btn-submit" type="submit">
               <svg class="bi bi-cursor" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
@@ -141,208 +134,294 @@
     <script src="js/jquery.dataTables.min.js"></script>
     <script src="js/active.js"></script>
 	<script src="js/jquery.inview.min.js"></script>
+	<!-- date mask -->
+	<script type="text/javascript" src="customjs/inputmask.js" charset="utf-8"></script>
+	<script src="customjs/jquery.inputmask.date.extensions.js"></script>
     <!-- PWA -->
     <script src="js/pwa.js"></script>
 	<script src="customjs/custom.js"></script>
   </body>
 </html>
 <script>
+/*
+function saveFile(dirEntry, fileData, fileName) {
+
+		dirEntry.getFile(fileName, { create: true, exclusive: false }, function (fileEntry) {
+
+			writeFile(fileEntry, fileData);
+			alert ("written");
+		}, onErrorCreateFile);
+	}
+
+
+	function writeFile(fileEntry, dataObj, isAppend) {
+
+		// Create a FileWriter object for our FileEntry (log.txt).
+		fileEntry.createWriter(function (fileWriter) {
+			alert ("inside");
+			fileWriter.onwriteend = function() {
+				alert("Successful file write...");
+				if (dataObj.type == "image/png") {
+					alert ("success");
+					readBinaryFile(fileEntry);
+				}
+				else {
+					alert ("failed");
+					readFile(fileEntry);
+				}
+			};
+
+			fileWriter.onerror = function(e) {
+				alert("Failed file write: " + e.toString());
+			};
+
+			fileWriter.write(dataObj);
+		});
+	}
+
+
+	alert ("alive");
+	var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://rovingcare.com/uploads/6096907872.png', true);
+    xhr.responseType = 'blob';
+
+    xhr.onload = function() {
+        if (this.status == 200) {
+			alert ("first step");
+            var blob = new Blob([this.response], { type: 'image/png' });
+            saveFile(dirEntry, blob, "downloadedImage.png");
+        } else {
+			alert ("failed: "  + this.status);
+		}
+    };
+    xhr.send();
+	
+	
+	
+	
+	
+	
+	
+	
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-	alert ("device is ready");
-	alert (FileTransfer);
-	window.directory = cordova.file.documentsDirectory;
-	alert ("Directory: " + directory);
-}
-	
-	function downloadFile (url, fileName) {
-		alert ("download function activated");
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-			fs.root.getFile(fileName, {
-				create: true,
-				exclusive: false
-			}, function (fileEntry) {
-				var fileURL = fileEntry.toURL();
-				alert ("file url: "+fileURL);
-				var fileTransfer = new FileTransfer();
-				fileTransfer.download(
-					url,
-					fileURL,
-					function (entry) {
-						var file = entry.toURL();
-						alert("File saved");
-						
-						// get file extension
-						var ext = filename.split('.').pop();
-						
-						if (ext=='pdf') {
-							mime='application/pdf';
-						} else if (ext=='zip') {
-							mime='application/zip';
-						} else if (ext=='rtf') {
-							mime='application/rtf';
-						} else if (ext=='doc') {
-							mime='application/msword';
-						} else if (ext=='jpg') {
-							mime='image/jpeg';
-						} else if (ext=='png') {
-							mime='image/png';
-						} else if (ext=='gif') {
-							mime='image/gif';
-						} else if (ext=='mp4') {
-							mime='video/mp4';
-						} else if (ext=='avi') {
-							mime='video/x-msvideo';
-						} else if (ext=='mov') {
-							mime='video/quicktime';
-						} else {
-							mime='null';
-						}
-						
-						alert ("file extension: "+ext+" - mime: "+mime);
-					},
-					function (error) {
-						alert('error ' + error.code + '(' + fileName + ')');
-					}
-				);
-			}, function (error) {
-				alert('error: 2');
-			});
-		}, function() {
-			alert('error: 3');
-		})
-	}
-	
-	
-	function download(filename) {
-		$('.alertfailed').hide();
-		alert ("Begin file download");
-		alert('file iz: https://rovingcare.com/uploads/'+filename);
-			
-		randomnum=Math.floor(Math.random() * 10000);
-		downloadFile('https://rovingcare.com/uploads/'+filename,randomnum+'_'+filename);
+	switch (device.platform) {
+		case "Android":
+			window.directory=cordova.file.externalRootDirectory;
+			break;
+		case "iOS":
+			window.directory = cordova.file.documentsDirectory;
+			break;
 	}
 
-	$(window).on('load', function() {
-		// get request id id
-		let searchParams = new URLSearchParams(window.location.search);
-		let getid = searchParams.get('id');
-		
-		// general data		
-		window.savedtoken = localStorage.getItem("token");
-		window.lastid=0;
-		
-		// function to get chat
-		function refresh() {
-			$.ajax({
-				beforeSend: function() { $('.spinner').show(); },
-				complete: function(){ $('.spinner').fadeOut(); },
-				type: "GET",
-				url: "https://rovingcare.com/appajax/getreqchat.php?id="+getid+"&savedtoken="+savedtoken+"&lastid="+lastid,
-					//data: dataString, // send token to grab data
-				success: function(data) {
-					var data = JSON.parse(data);
-					$.each(data, function(i, field){
-						if (data[i].fromroving==1) { // sent by roving
-							if (data[i].file==1) { // file
-								text='<div class="single-chat-item"><div class="user-avatar mt-1"><img src="img/favicon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><div class="download-file-wrap d-flex align-items-center"><div class="download-avatar bg-light"><div class="dl-icon"><i class="bi bi-file-earmark-zip-fill"></i></div><a class="download-btn" href="javascript:;"><i class="bi bi-download" onclick="download(\''+data[i].filename+'\')"></i></a></div><div class="download-file-info"><div class="file-name text-truncate">'+data[i].filename+'</div><div class="file-size">'+data[i].filesize+'</div></div></div></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div></div>';
-							} else { // text
-								text='<div class="single-chat-item"><div class="user-avatar mt-1"><img src="img/favicon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><p>'+data[i].message+'</p></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div></div>';
-							}
-						} else { // sent by user
-							if (data[i].file==1) {
-								text='<div class="single-chat-item outgoing"><div class="user-avatar mt-1"><img src="img/user-icon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><div class="download-file-wrap d-flex align-items-center"><div class="download-avatar bg-light"><div class="dl-icon"><i class="bi bi-file-earmark-zip-fill"></i></div><a class="download-btn" href="javascript:;"><i class="bi bi-download" onclick="download(\''+data[i].filename+'\')"></i></a></div><div class="download-file-info"><div class="file-name text-truncate">'+data[i].filename+'</div><div class="file-size">'+data[i].filesize+'</div></div></div></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div><div>';
-							} else { // text
-								text='<div class="single-chat-item outgoing"><div class="user-avatar mt-1"><img src="img/user-icon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><p>'+data[i].message+'</p></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div></div>';
-							}
-						}
-						
-						lastid=data[i].lastid;
-						console.log('lastid='+lastid);
-						$('.chatdiv').append(text);
-					});
-				},
-			});
-		}
-		
-		refresh();
-		setInterval(refresh, 10000);
+	var permissions = cordova.plugins.permissions;
+	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function( status ){
+	  if ( status.hasPermission ) {
+	  } else {
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
+	  }
+	});
 
+};
+*/
+
+$(window).on('load', function() {
+	// get request id id
+	let searchParams = new URLSearchParams(window.location.search);
+	let getid = searchParams.get('id');
+	
+	// general data		
+	window.savedtoken = localStorage.getItem("token");
+	window.lastid=0;
+	
+	// function to get chat
+	function refresh() {
 		$.ajax({
 			beforeSend: function() { $('.spinner').show(); },
 			complete: function(){ $('.spinner').fadeOut(); },
 			type: "GET",
-			url: "https://rovingcare.com/appajax/getreq.php?id="+getid+"&savedtoken="+savedtoken,
+			url: "https://rovingcare.com/appajax/getreqchat.php?id="+getid+"&savedtoken="+savedtoken+"&lastid="+lastid,
 				//data: dataString, // send token to grab data
 			success: function(data) {
 				var data = JSON.parse(data);
 				$.each(data, function(i, field){
-					$(".requestinfo").html("Request #"+getid+" - "+data[0].servicename);
+					if (data[i].fromroving==1) { // sent by roving
+						if (data[i].file==1) { // file
+							text='<div class="single-chat-item"><div class="user-avatar mt-1"><img src="img/favicon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><div class="download-file-wrap d-flex align-items-center"><div class="download-avatar bg-light"><div class="dl-icon"><i class="bi bi-file-earmark-zip-fill"></i></div><a class="download-btn" href="javascript:;"><i class="bi bi-download" onclick="download(\''+data[i].filename+'\')"></i></a></div><div class="download-file-info"><div class="file-name text-truncate">'+data[i].filename+'</div><div class="file-size">'+data[i].filesize+'</div></div></div></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div></div>';
+						} else { // text
+							text='<div class="single-chat-item"><div class="user-avatar mt-1"><img src="img/favicon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><p>'+data[i].message+'</p></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div></div>';
+						}
+					} else { // sent by user
+						if (data[i].file==1) {
+							text='<div class="single-chat-item outgoing"><div class="user-avatar mt-1"><img src="img/user-icon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><div class="download-file-wrap d-flex align-items-center"><div class="download-avatar bg-light"><div class="dl-icon"><i class="bi bi-file-earmark-zip-fill"></i></div><a class="download-btn" href="javascript:;"><i class="bi bi-download" onclick="download(\''+data[i].filename+'\')"></i></a></div><div class="download-file-info"><div class="file-name text-truncate">'+data[i].filename+'</div><div class="file-size">'+data[i].filesize+'</div></div></div></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div><div>';
+						} else { // text
+							text='<div class="single-chat-item outgoing"><div class="user-avatar mt-1"><img src="img/user-icon.png"></div><div class="user-message"><div class="message-content"><div class="single-message"><p>'+data[i].message+'</p></div></div><div class="message-time-status"><div class="sent-time">'+data[i].time+'</div></div></div></div>';
+						}
+					}
+					
+					lastid=data[i].lastid;
+					console.log('lastid='+lastid);
+					$('.chatdiv').append(text);
 				});
 			},
-			error:function(XMLHttpRequest,textStatus,errorThrown){
-				window.location.replace("requests.html");
-			}
 		});
-		
-		
-		
-		$('#backbtn').click(function(e){
-			e.preventDefault();
-			window.location.replace('request.html?id='+getid);
-		});
-		
-		// send message
-		$('.btn-submit').click(function(e){
-			e.preventDefault();
-			$('.alertfailed').hide();
-			textmessage=$('#textmessage').val();
-			$.ajax({
-				beforeSend: function() { $('.alertwait').show(); },
-				complete: function(){ $('.alertwait').hide(); },
-				type: "POST",
-				processData: false,
-				contentType: false,
-				url: "https://rovingcare.com/appajax/sendchattext.php?id="+getid+"&savedtoken="+savedtoken+"&text="+textmessage,
-				//data: formData, // serializes the form's elements.
-				success: function(data) {
-					$('#textmessage').val("");
-					refresh();
-				},
-			});
-		});
-		
-		$('.uploadfile').click(function() {
-		   $('#newfile').click();
-		});
+	}
+	
+	refresh();
+	setInterval(refresh, 10000);
 
-		// send file
-		$('#newfile').change(function() {
-			$('.alertfailed').hide();
-			var formData = new FormData();
-			formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
-			
-			$.ajax({
-				beforeSend: function() { $('.alertwait').show(); },
-				complete: function(){ $('.alertwait').hide(); },
-				type: "POST",
-				processData: false,
-				contentType: false,
-				url: "https://rovingcare.com/appajax/sendchatfile.php?id="+getid+"&savedtoken="+savedtoken,
-				data: formData, // serializes the form's elements.
-				success: function(data) {
-					refresh();
-				},
-				error:function(XMLHttpRequest,textStatus,errorThrown){
-				var errormsg=XMLHttpRequest.responseText;
-					$('.alertfailed').show();
-					$('.alertfailed').html(errormsg);
-				}
+	$.ajax({
+		beforeSend: function() { $('.spinner').show(); },
+		complete: function(){ $('.spinner').fadeOut(); },
+		type: "GET",
+		url: "https://rovingcare.com/appajax/getreq.php?id="+getid+"&savedtoken="+savedtoken,
+			//data: dataString, // send token to grab data
+		success: function(data) {
+			var data = JSON.parse(data);
+			$.each(data, function(i, field){
+				$(".requestinfo").html("Request #"+getid+" - "+data[0].servicename);
 			});
-		});
+		},
+		error:function(XMLHttpRequest,textStatus,errorThrown){
+			window.location.replace("requests.html");
+		}
 	});
 	
 	
-			
 	
+	$('#backbtn').click(function(e){
+		e.preventDefault();
+		window.location.replace('request.html?id='+getid);
+	});
+	
+	// send message
+	$('.btn-submit').click(function(e){
+		e.preventDefault();
+		$('.alert').hide();
+		textmessage=$('#textmessage').val();
+		$.ajax({
+			beforeSend: function() { $('.spinner-grow').show(); },
+			complete: function(){ $('.spinner-grow').hide(); },
+			type: "POST",
+			processData: false,
+			contentType: false,
+			url: "https://rovingcare.com/appajax/sendchattext.php?id="+getid+"&savedtoken="+savedtoken+"&text="+textmessage,
+			//data: formData, // serializes the form's elements.
+			success: function(data) {
+				$('#textmessage').val("");
+				refresh();
+			},
+		});
+	});
+	
+	$('.uploadfile').click(function() {
+	   $('#newfile').click();
+	});
+
+	// send file
+	$('#newfile').change(function() {
+		$('.alert').hide();
+		var formData = new FormData();
+		formData.append('uploaded_file', $('input[type=file]')[0].files[0]); 
+		
+		$.ajax({
+			beforeSend: function() { $('.spinner-grow').show(); },
+			complete: function(){ $('.spinner-grow').hide(); },
+			type: "POST",
+			processData: false,
+			contentType: false,
+			url: "https://rovingcare.com/appajax/sendchatfile.php?id="+getid+"&savedtoken="+savedtoken,
+			data: formData, // serializes the form's elements.
+			success: function(data) {
+				refresh();
+			},
+			error:function(XMLHttpRequest,textStatus,errorThrown){
+			var errormsg=XMLHttpRequest.responseText;
+				$('.alert').show();
+				$('.alert').html(errormsg);
+			}
+		});
+    });
+	
+	function download(filename) {
+		// get file extension
+		var ext = filename.split('.').pop();
+		
+		if (ext=='pdf') {
+			mime='application/pdf';
+		} else if (ext=='zip') {
+			mime='application/zip';
+		} else if (ext=='rtf') {
+			mime='application/rtf';
+		} else if (ext=='doc') {
+			mime='application/msword';
+		} else if (ext=='jpg') {
+			mime='image/jpeg';
+		} else if (ext=='png') {
+			mime='image/png';
+		} else if (ext=='gif') {
+			mime='image/gif';
+		} else if (ext=='mp4') {
+			mime='video/mp4';
+		} else if (ext=='avi') {
+			mime='video/x-msvideo';
+		} else if (ext=='mov') {
+			mime='video/quicktime';
+		} else {
+			mime='null';
+		}
+		
+		alert ("extension: "+ext+" - mime: "+mime);
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", 'https://rovingcare.com/uploads/'+filename, true);
+		xhr.responseType = "blob";
+
+		xhr.onreadystatechange = function () {
+			alert("readyState: "+xhr.readyState);
+			alert("status: "+xhr.status);
+		}
+
+		xhr.onload = function() {
+		
+			var blob = xhr.response;
+			alert("xhr.onload response: "+xhr.response);
+			alert("cordova.file: "+cordova.file);
+			alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
+			alert("cacheDirectory: "+cordova.file.cacheDirectory);
+			alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+			alert("documentsDirectory: "+cordova.file.documentsDirectory);
+			
+			randomnum=Math.floor(Math.random() * 10000);
+			var newfilename=randomnum+'_'+filename;
+			
+			window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+				directoryEntry.getFile(newfilename, { create: true }, function (fileEntry) {
+					fileEntry.createWriter(function (fileWriter) {
+						fileWriter.onwriteend = function (result) {
+							alert("Success");
+							cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + newfilename, 'image/png');
+						};
+						fileWriter.onerror = function (e) {
+							alert("failed 1");
+						};
+						fileWriter.write(blob);
+					}, function(e) {
+						alert("failed 2");
+					});
+				}, function(e) {
+					alert("failed 3");
+				});
+			}, function(e) {
+				alert("failed 4");
+			});
+		}
+		xhr.onerror = function(e) { 
+			alert("failed 5: "+xhr.status);
+		}
+
+		xhr.send();
+	}
+	
+});
 </script>
