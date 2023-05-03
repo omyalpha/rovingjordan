@@ -116,7 +116,7 @@
     <script src="js/jquery.dataTables.min.js"></script>
     <script src="js/active.js"></script>
     <!-- PWA -->
-    <script src="js/pwa.js"></script>
+	<script src="js/pwa.js"></script>
 	<script src="customjs/custom.js"></script>
   </body>
 </html>
@@ -238,10 +238,11 @@ $(window).on('load', function() {
 	// testing - delete //
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady() {
-	alert("onload: cordova.file: "+cordova.file);
-	alert("onload: cacheDirectory: "+cordova.file.cacheDirectory);
-	alert("onload: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
-	alert("onload:vdocumentsDirectory: "+cordova.file.documentsDirectory);
+		alert("onload: cordova.file: "+cordova.file);
+		alert("onload: cacheDirectory: "+cordova.file.cacheDirectory);
+		alert("onload: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+		alert("onload:vdocumentsDirectory: "+cordova.file.documentsDirectory);
+	}
 	//////////////////////
 
 	// get requests list
