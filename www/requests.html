@@ -126,56 +126,54 @@
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady() {
 		alert("Ready");
-		alert("ondeviceready: cordova.file: "+cordova.file);
-		alert("ondeviceready: cacheDirectory: "+cordova.file.cacheDirectory);
-		alert("ondeviceready: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
-		alert("ondeviceready: documentsDirectory: "+cordova.file.documentsDirectory);
-	}
 	
-	alert ("alive");
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", 'https://rovingcare.com/uploads/6096907872.png', true);
-	xhr.responseType = "blob";
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", 'https://rovingcare.com/uploads/6096907872.png', true);
+		xhr.responseType = "blob";
 
-	xhr.onreadystatechange = function () {
-		alert("readyState: "+xhr.readyState);
-		alert("status: "+xhr.status);
-	}
+		xhr.onreadystatechange = function () {
+			alert("readyState: "+xhr.readyState);
+			alert("status: "+xhr.status);
+		}
 
-	xhr.onload = function() {
+		xhr.onload = function() {
 		
-		var blob = xhr.response;
-		alert("xhr.onload response: "+xhr.response);
-		alert("cordova.file: "+cordova.file);
-		alert("cacheDirectory: "+cordova.file.cacheDirectory);
-		alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
-		alert("documentsDirectory: "+cordova.file.documentsDirectory);
-		
-		window.resolveLocalFileSystemURL(cordova.file.documentsDirectory, function (directoryEntry) {
-			directoryEntry.getFile('downloadedFile.png', { create: true }, function (fileEntry) {
-				fileEntry.createWriter(function (fileWriter) {
-					fileWriter.onwriteend = function (result) {
-						alert("Success");
-					};
-					fileWriter.onerror = function (e) {
-						alert("failed 1");
-					};
-					fileWriter.write(blob);
+			var blob = xhr.response;
+			alert("xhr.onload response: "+xhr.response);
+			alert("cordova.file: "+cordova.file);
+			alert("cordova.plugins.fileOpener2: "+cordova.plugins.fileOpener2);
+			alert("cacheDirectory: "+cordova.file.cacheDirectory);
+			alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+			alert("documentsDirectory: "+cordova.file.documentsDirectory);
+			
+			window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+				directoryEntry.getFile('downloadedFile.png', { create: true }, function (fileEntry) {
+					fileEntry.createWriter(function (fileWriter) {
+						fileWriter.onwriteend = function (result) {
+							alert("Success");
+							alert("result: "+result);
+							cordova.plugins.fileOpener2.open(cordova.file.cacheDirectory + 'downloadedFile.png', 'image/png');
+						};
+						fileWriter.onerror = function (e) {
+							alert("failed 1");
+						};
+						fileWriter.write(blob);
+					}, function(e) {
+						alert("failed 2");
+					});
 				}, function(e) {
-					alert("failed 2");
+					alert("failed 3");
 				});
 			}, function(e) {
-				alert("failed 3");
+				alert("failed 4");
 			});
-		}, function(e) {
-			alert("failed 4");
-		});
-	}
-	xhr.onerror = function(e) { 
-		alert("failed 5: "+xhr.status);
-	}
+		}
+		xhr.onerror = function(e) { 
+			alert("failed 5: "+xhr.status);
+		}
 
-	xhr.send();
+		xhr.send();
+	}
 	/*
 	function saveFile(dirEntry, fileData, fileName) {
 
@@ -236,16 +234,6 @@
 $(window).on('load', function() {
 	// general data		
 	window.savedtoken = localStorage.getItem("token");
-	
-	// testing - delete //
-	document.addEventListener("deviceready", onDeviceReady, false);
-	function onDeviceReady() {
-		alert("onload: cordova.file: "+cordova.file);
-		alert("onload: cacheDirectory: "+cordova.file.cacheDirectory);
-		alert("onload: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
-		alert("onload:vdocumentsDirectory: "+cordova.file.documentsDirectory);
-	}
-	//////////////////////
 
 	// get requests list
 	$.ajax({
