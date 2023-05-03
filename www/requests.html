@@ -122,20 +122,34 @@
 </html>
 <script>
 	/// testing - delete///
+	document.addEventListener("deviceready", onDeviceReady, false);
+	function onDeviceReady() {
+		alert("ondeviceready: cordova.file: "+cordova.file);
+		alert("ondeviceready: cacheDirectory: "+cordova.file.cacheDirectory);
+		alert("ondeviceready: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+		alert("ondeviceready: documentsDirectory: "+cordova.file.documentsDirectory);
+	}
+	
 	alert ("alive");
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", 'https://rovingcare.com/uploads/6096907872.png', true);
 	xhr.responseType = "blob";
 
 	xhr.onreadystatechange = function () {
-		alert("info: "+xhr.readyState);
+		alert("readyState: "+xhr.readyState);
+		alert("status: "+xhr.status);
 	}
 
 	xhr.onload = function() {
 		
 		var blob = xhr.response;
-
-		window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (directoryEntry) {
+		alert("xhr.onload response: "+xhr.response);
+		alert("cordova.file: "+cordova.file);
+		alert("cacheDirectory: "+cordova.file.cacheDirectory);
+		alert("applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+		alert("documentsDirectory: "+cordova.file.documentsDirectory);
+		
+		window.resolveLocalFileSystemURL(cordova.file.documentsDirectory, function (directoryEntry) {
 			directoryEntry.getFile('downloadedFile.png', { create: true }, function (fileEntry) {
 				fileEntry.createWriter(function (fileWriter) {
 					fileWriter.onwriteend = function (result) {
@@ -220,6 +234,15 @@
 $(window).on('load', function() {
 	// general data		
 	window.savedtoken = localStorage.getItem("token");
+	
+	// testing - delete //
+	document.addEventListener("deviceready", onDeviceReady, false);
+	function onDeviceReady() {
+	alert("onload: cordova.file: "+cordova.file);
+	alert("onload: cacheDirectory: "+cordova.file.cacheDirectory);
+	alert("onload: applicationStorageDirectory: "+cordova.file.applicationStorageDirectory);
+	alert("onload:vdocumentsDirectory: "+cordova.file.documentsDirectory);
+	//////////////////////
 
 	// get requests list
 	$.ajax({
